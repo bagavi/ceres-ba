@@ -1,21 +1,20 @@
-==Local bundle adjustment problem for multiple camera systes==
+# Local bundle adjustment problem for multiple camera systes
 1. `bash create_data.sh` - Creates data
 2. `bash run.sh` - Runs data using the option set in the function `get_default()` from `src/ceres_options.cpp`.
                   Change the options in the above function to run under different option settings
-
+3. The ceres const functions are defined in `src/ba_reproj_error_aa.h`
 
 Note: This code is part of a larger rust codebase. The rust codebase creates bindings to this codebase and hence a few idiosynchrnoies here and there   
 
-Explanation
 
-Each problem instance has
+## Each problem instance has
 1. Camera system with multiple frames
 2. Fixed cameras (keyframes)
 3. Variable cameras (keyframes)
 4. Variable 3d points (landmarks)
 
 
-We have two kinds of correspondences and they correspond to two cost functions
+**We have two kinds of correspondences and they correspond to two cost functions**
 1. Between variable 3d and variable camera -- here both the 3d point position and camera pose are variables 
 1. Between variable 3d and fixed camera -- here only the 3d point position are variables
 
@@ -27,11 +26,13 @@ Steps to get the reprojection error:
 
 
 
+
+
 Code:
 1. `test/create_bundle_adjustment_data.cpp` - creates a simulated dataset and stores it in data/data.csv
 2. `test/bundle_adjust.cpp` - loads the data from data/data.csv and constructs the "right" data strcutures and runs bundle adjustment
 3. `src/bundle_adjustment.cpp` - Constructs Ceres::Problem from the "right" data structures
-4. `ba_reproj_error_aa.h` - Defines two cost functions for the local ba
+4. `src/ba_reproj_error_aa.h` - Defines two cost functions for the local ba
 5. `src/ceres_optoins.cpp` - Used to run solver using different ceres options
 
 Other code
