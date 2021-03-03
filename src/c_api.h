@@ -2,12 +2,9 @@
 
 #define BEARING_DIM 2
 #define POINT_DIM 3
-#define AA_ROT_DIM 3
+#define AA_ROT_DIM 3  // AA - Axis angle
 #define AA_POSE_DIM 6
-#define QUAT_ROT_DIM 4
-#define QUAT_POSE_DIM 7
 #define BEARING_WINDOW_LEN 1.0
-#define LM_SEED_START 10000
 
 #ifdef __cplusplus
 extern "C" {
@@ -78,11 +75,8 @@ void options_set_max_solve_time(CeresOptionWrapper* ceres_opts, double max_solve
 void options_set_num_iterations(CeresOptionWrapper* ceres_opts, int max_num_iterations);
 
 // b. construst and solve ba
-CeresProblemWrapper* construct_ba(BAData* data, CeresOptionWrapper* ceres_opts, const unsigned int* new_kf);
+CeresProblemWrapper* construct_ba(BAData* data, CeresOptionWrapper* ceres_opts);
 OptSummary solve_ba(CeresProblemWrapper* ceres_prob, CeresOptionWrapper* ceres_opts, int print_summary);
-
-// test code
-void test_binding_add_one(int* a);
 
 #ifdef __cplusplus
 }

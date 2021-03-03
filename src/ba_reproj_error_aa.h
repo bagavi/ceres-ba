@@ -8,12 +8,12 @@
 // Bundle adjustment has edges, where each edge connects a landmark and a keyframe
 // Each node could be fixed or free to be optimized
 
-struct BAVarKfVarLmErr {  // both lm point and kf pose are variables
-    BAVarKfVarLmErr(double* bearing, double* t_fl_fx) : bearing_(bearing), t_fl_fx_(t_fl_fx) {}
+struct VarKfVarLmErr {  // both lm point and kf pose are variables
+    VarKfVarLmErr(double* bearing, double* t_fl_fx) : bearing_(bearing), t_fl_fx_(t_fl_fx) {}
 
     template <typename T>
     bool operator()(const T* const kf_t_g_ifl, const T* const lm, T* residuals) const {
-        // 1.a Transform form global  to left
+        // 1.a Transform form global to left
         // kf_t_g_ifl[0,1,2] are the angle-axis rotation.
         T ifl_lm[POINT_DIM];
         ceres::AngleAxisRotatePoint(kf_t_g_ifl, lm, ifl_lm);
@@ -53,8 +53,8 @@ struct BAVarKfVarLmErr {  // both lm point and kf pose are variables
     // Factory to hide the construction of the CostFunction object from
     // the client code.
     static ceres::CostFunction* Create(double* bearing, double* t_fl_fx) {
-        return (new ceres::AutoDiffCostFunction<BAVarKfVarLmErr, BEARING_DIM, AA_POSE_DIM, POINT_DIM>(
-            new BAVarKfVarLmErr(bearing, t_fl_fx)));
+        return (new ceres::AutoDiffCostFunction<VarKfVarLmErr, BEARING_DIM, AA_POSE_DIM, POINT_DIM>(
+            new VarKfVarLmErr(bearing, t_fl_fx)));
     }
 
     // fixed data
@@ -62,8 +62,8 @@ struct BAVarKfVarLmErr {  // both lm point and kf pose are variables
     double* t_fl_fx_;  // transforms lm from front left to front `x` camera frame
 };
 
-struct BAFixedKfVarLmErr {  //  lm point is variable and kf pose is fixed
-    BAFixedKfVarLmErr(double* bearing, double* t_fl_fx, double* kf_t_g_ifl) : bearing_(bearing), t_fl_fx_(t_fl_fx), kf_t_g_ifl_(kf_t_g_ifl) {}
+struct FixedKfVarLmErr {  //  lm point is variable and kf pose is fixed
+    FixedKfVarLmErr(double* bearing, double* t_fl_fx, double* kf_t_g_ifl) : bearing_(bearing), t_fl_fx_(t_fl_fx), kf_t_g_ifl_(kf_t_g_ifl) {}
 
     template <typename T>
     bool operator()(const T* const lm, T* residuals) const {
@@ -111,8 +111,8 @@ struct BAFixedKfVarLmErr {  //  lm point is variable and kf pose is fixed
     // Factory to hide the construction of the CostFunction object from
     // the client code.
     static ceres::CostFunction* Create(double* bearing, double* t_fl_fx, double* kf_t_g_ifl) {
-        return (new ceres::AutoDiffCostFunction<BAFixedKfVarLmErr, BEARING_DIM, POINT_DIM>(
-            new BAFixedKfVarLmErr(bearing, t_fl_fx, kf_t_g_ifl)));
+        return (new ceres::AutoDiffCostFunction<FixedKfVarLmErr, BEARING_DIM, POINT_DIM>(
+            new FixedKfVarLmErr(bearing, t_fl_fx, kf_t_g_ifl)));
     }
 
     // fixed data

@@ -8,8 +8,8 @@
 
 #include "../src/c_api.h"
 #include "../src/read_write.h"
-#include "../src/utils.h"
 #include "ceres/rotation.h"
+#include "utils.h"
 
 using std::cout;
 using std::endl;

@@ -17,7 +17,7 @@ find_package(Ceres REQUIRED)
 
 file(GLOB_RECURSE SOURCE_CODE
     ../src/bundle_adjustment.cpp
-    ../src/utils.cpp
+    utils.cpp
     ../src/ceres_options.cpp
     ../src/read_write.cpp
     )
@@ -26,5 +26,5 @@ file(GLOB_RECURSE SOURCE_CODE
 add_executable(create_ba_data create_bundle_adjustment_data.cpp ${SOURCE_CODE})
 target_link_libraries(create_ba_data Ceres::ceres)
 
-add_executable(test_ba test_bundle_adjustment.cpp ${SOURCE_CODE})
-target_link_libraries(test_ba Ceres::ceres)
+add_executable(run_ba bundle_adjust.cpp ${SOURCE_CODE})
+target_link_libraries(run_ba Ceres::ceres)

@@ -6,8 +6,6 @@
 
 #include "ba_reproj_error_aa.h"
 #include "c_api.h"
-#include "callbacks.h"
-#include "utils.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -16,8 +14,7 @@ extern "C" {
 using std::cout;
 using std::endl;
 // Constructs the ceres problem from `data` and adds appropriate ordering in Options.
-// It also adds a callback dependent on new_kf
-CeresProblemWrapper *construct_ba(BAData *data, CeresOptionWrapper *ceres_opts, const unsigned int *new_kf) {
+CeresProblemWrapper *construct_ba(BAData *data, CeresOptionWrapper *ceres_opts) {
     CeresProblemWrapper *problem = new CeresProblemWrapper();
     auto &ceres_prob = problem->ceres_prob;
 
@@ -46,7 +43,7 @@ CeresProblemWrapper *construct_ba(BAData *data, CeresOptionWrapper *ceres_opts, 
         ceres::LossFunction *loss_function =
             NULL;  // new ceres::HuberLoss(data->huber_loss_thresh);
         ceres::CostFunction *residue_func =
-            BAVarKfVarLmErr::Create(bearing, t_fl_fx);  // fixed data
+            VarKfVarLmErr::Create(bearing, t_fl_fx);  // fixed data
         ceres_prob.AddResidualBlock(residue_func, loss_function, kf_t_g_ifl,
                                     lm);  // var data
     }
@@ -69,7 +66,7 @@ CeresProblemWrapper *construct_ba(BAData *data, CeresOptionWrapper *ceres_opts, 
         auto bearing = &fix_corresp->bearings[BEARING_DIM * i];
         ceres::LossFunction *loss_function = NULL;
         ceres::CostFunction *residue_func =
-            BAFixedKfVarLmErr::Create(bearing, t_fl_fx, kf_t_g_ifl);   // fixed data
+            FixedKfVarLmErr::Create(bearing, t_fl_fx, kf_t_g_ifl);     // fixed data
         ceres_prob.AddResidualBlock(residue_func, loss_function, lm);  // var data
     }
 
@@ -100,10 +97,6 @@ CeresProblemWrapper *construct_ba(BAData *data, CeresOptionWrapper *ceres_opts, 
                 kf, 1);  // group 1
         }
     }
-
-    //4: Adds a iteration callback function to stop Solver if mapper gets a new kf
-    NewKfCallback *kf_callback = new NewKfCallback(new_kf);
-    ceres_opts->opts.callbacks.push_back(kf_callback);
 
     return problem;
 }
