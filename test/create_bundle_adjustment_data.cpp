@@ -172,7 +172,6 @@ void create_ba_data(double lm_noise, double kf_noise, double bearing_noise, cons
         &fix_kf_data,
         &fix_corresp,
         0,
-        0,
     };
 
     write_data(filename, ba_data, bearing_noise, lm_noise, kf_noise);

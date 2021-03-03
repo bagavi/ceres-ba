@@ -9,7 +9,6 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-
 typedef struct _OptSummary {
     double initial_cost;
     double final_cost;
@@ -60,7 +59,6 @@ typedef struct _BAData {
     BACorresp* fix_corresp;
     // Solver options
     double max_solver_time_in_seconds;
-    double huber_loss_thresh;
 } BAData;
 
 // wrapper on ceres data structure

@@ -1,10 +1,18 @@
 ==Local bundle adjustment problem for multiple camera systes==
+1. `bash create_data.sh` - Creates data
+2. `bash run.sh` - Runs data using the option set in the function `get_default()` from `src/ceres_options.cpp`.
+                  Change the options in the above function to run under different option settings
+
+
+Note: This code is part of a larger rust codebase. The rust codebase creates bindings to this codebase and hence a few idiosynchrnoies here and there   
+
+Explanation
 
 Each problem instance has
-0. Camera system with multiple frames
-1. Fixed cameras (keyframes)
-2. Variable cameras (keyframes)
-3. Variable 3d points (landmarks)
+1. Camera system with multiple frames
+2. Fixed cameras (keyframes)
+3. Variable cameras (keyframes)
+4. Variable 3d points (landmarks)
 
 
 We have two kinds of correspondences and they correspond to two cost functions
@@ -31,4 +39,3 @@ Other code
 7. `c_api.h` - Defines the main structs and functions for local ba
 
 
-Note: This code is part of a larger rust codebase. The rust codebase creates bindings to this codebase and hence a few idiosynchrnoies here and there   
